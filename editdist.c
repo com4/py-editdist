@@ -25,7 +25,7 @@
 typedef unsigned __int8 u_int8_t;
 #endif
 
-#define EDITDIST_VERSION	"0.3"
+#define EDITDIST_VERSION	"0.4"
 
 /* $Id$ */
 
@@ -94,7 +94,7 @@ PyDoc_STRVAR(editdist_distance_doc,
 static PyObject *
 editdist_distance(PyObject *self, PyObject *args)
 {
-	char *a, *b;
+	const u_int8_t *a, *b;
 	int alen, blen, r;
 
 	if (!PyArg_ParseTuple(args, "s#s#", &a, &alen, &b, &blen))
@@ -104,8 +104,10 @@ editdist_distance(PyObject *self, PyObject *args)
 		PyErr_SetString(PyExc_MemoryError, "Out of memory");
 		return NULL;
 	}
-	return PyInt_FromLong(r);
+	return PyLong_FromLong(r);
 }
+
+//PyDoc_STRVAR(editdist_distance_doc, "Calculate Levenshtein's edit distance.\n");
 
 static PyMethodDef editdist_methods[] = {
 	{	"distance",	(PyCFunction)editdist_distance,
@@ -113,13 +115,25 @@ static PyMethodDef editdist_methods[] = {
 	{NULL, NULL, 0, NULL }	/* sentinel */
 };
 
-PyDoc_STRVAR(module_doc, "Calculate Levenshtein's edit distance.\n");
+static struct PyModuleDef editdist_moduledef = {
+    PyModuleDef_HEAD_INIT,
+    "editdist",
+    NULL,
+    1000,
+    editdist_methods,
+    NULL,
+    NULL,
+    NULL,
+    NULL
+};
 
-PyMODINIT_FUNC
-initeditdist(void)
+PyObject *
+PyInit_editdist(void)
 {
 	PyObject *m;
 
-	m = Py_InitModule3("editdist", editdist_methods, module_doc);
+	m = PyModule_Create(&editdist_moduledef);
 	PyModule_AddStringConstant(m, "__version__", EDITDIST_VERSION);
+
+	return m;
 }
