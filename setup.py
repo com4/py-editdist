@@ -28,7 +28,7 @@ if __name__ == '__main__':
 		version = VERSION,
 		author = "Damien Miller",
 		author_email = "djm@mindrot.org",
-		url = "http://www.mindrot.org/py-editdist.html",
+		url = "https://code.google.com/archive/p/py-editdist/",
 		description = "Calculate Levenshtein's edit distance",
 		long_description = """\
 CPython module to quickly calculate Levenshtein's edit distance between
